@@ -1,0 +1,47 @@
+﻿@model MHR_V02.ViewModels.Base.RegisterViewModel
+
+@{
+    ViewData["Title"] = @ViewData["Register"];
+}
+<div class="Register-container">
+    <form asp-action="Register" class="Register-form">
+        <div class="form-group">
+            <label asp-for="FirstName" class="control-label">@ViewData["FirstName"]</label>
+            <input asp-for="FirstName" class="form-control glass-input" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="control-label">@ViewData["LastName"]</label>
+            <input asp-for="LastName" class="form-control glass-input" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">@ViewData["Email"]</label>
+            <input asp-for="Email" class="form-control glass-input" type="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label">@ViewData["Password"]</label>
+            <input asp-for="Password" class="form-control glass-input" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword" class="control-label">@ViewData["ConfirmPassword"]</label>
+            <input asp-for="ConfirmPassword" class="form-control glass-input" type="password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value=@ViewData["Register"] class="btn btn-primary glass-btn-primary" />
+        </div>
+    
+
+    <div class="text-center">
+        <a asp-action="Login" class="glass-link">@ViewData["AlreadyHaveAnAccountLoginHere"]</a>
+    </div>
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

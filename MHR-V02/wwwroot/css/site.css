@@ -1,0 +1,103 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+:root {
+    --primary-color: #123456; 
+    --accent-color: #0fa36b; 
+    --background-color: linear-gradient(135deg, #123456, #0fa36b);
+    --text-color: #ffffff;
+    --glass-bg-color: rgba(255, 255, 255, 0.2);
+    --glass-border-color: rgba(255, 255, 255, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+body {
+    background: var(--background-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+}
+
+header, footer {
+    backdrop-filter: blur(15px);
+    background: var(--glass-bg-color);
+    border: 1px solid var(--glass-border-color);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.glass-card {
+    backdrop-filter: blur(20px);
+    background: var(--glass-bg-color);
+    border: 1px solid var(--glass-border-color);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    margin: 1rem;
+}
+
+
+.navbar {
+    background: var(--glass-bg-color);
+    border: 1px solid var(--glass-border-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    padding: 0.8rem 1rem;
+}
+
+.nav-link {
+    color: var(--text-color);
+    transition: color 0.3s;
+}
+
+    .nav-link:hover {
+        color: var(--accent-color);
+    }
+
+
+
+button, select {
+    backdrop-filter: blur(10px);
+    background: var(--glass-bg-color);
+    border: 1px solid var(--glass-border-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+    button:hover, select:hover {
+        background: var(--accent-color);
+        color: #ffffff;
+    }
+.language-selector, button {
+    backdrop-filter: blur(10px);
+    background: var(--glass-bg-color);
+    border: 1px solid var(--glass-border-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+    .language-selector:hover, button:hover {
+        background: var(--accent-color);
+        color: #ffffff;
+    }

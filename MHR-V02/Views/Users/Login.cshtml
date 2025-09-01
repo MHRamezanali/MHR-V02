@@ -1,0 +1,37 @@
+﻿@model MHR_V02.ViewModels.Base.LoginViewModel
+
+@{
+    ViewData["Title"] = @ViewData["Login"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="login-container">
+    <form asp-action="Login" method="post" class="login-form">
+        <div >
+            <label asp-for="Email" class="control-label">@ViewData["Email"]</label>
+            <input asp-for="Email" class="form-control glass-input" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div >
+            <label asp-for="Password" class="control-label">@ViewData["Password"]</label>
+            <input asp-for="Password" class="form-control glass-input" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <input asp-for="RememberMe" class="form-check-input" />
+            <label asp-for="RememberMe" class="form-check-label">@ViewData["RememberMe"]</label>
+        </div>
+        <button type="submit" class="btn btn-primary glass-btn-primary">@ViewData["Login"]</button>
+    </form>
+    <div class="drops">
+        <div class="drop drop-1"></div>
+        <div class="drop drop-2"></div>
+        <div class="drop drop-3"></div>
+        <div class="drop drop-4"></div>
+        <div class="drop drop-5"></div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

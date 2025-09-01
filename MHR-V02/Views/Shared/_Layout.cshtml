@@ -1,0 +1,101 @@
+﻿@using System.Globalization
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@((CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) ? "rtl" : "ltr")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <!-- لینک فایل‌های استایل -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/glassmorphism-theme.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light">
+            <div class="container-fluid">
+                <span class="glass-title">@ViewData["Title"]</span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <!-- منوی زبان‌ها -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle glass-button" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Ln
+                            </a>
+                            <ul class="dropdown-menu glass-dropdown" aria-labelledby="languageDropdown">
+                                <li>
+                                    <a class="dropdown-item glass-dropdown-item" asp-area="" asp-controller="Language" asp-action="SetLanguage" asp-route-culture="fa" asp-route-returnUrl="@Context.Request.Path">فارسی</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item glass-dropdown-item" asp-area="" asp-controller="Language" asp-action="SetLanguage" asp-route-culture="ur" asp-route-returnUrl="@Context.Request.Path">Urdo</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item glass-dropdown-item" asp-area="" asp-controller="Language" asp-action="SetLanguage" asp-route-culture="en" asp-route-returnUrl="@Context.Request.Path">English</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- منوی کاربران -->
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (Context.Session.GetString("UserEmail") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@ViewData["Home"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">@ViewData["Privacy"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index">@ViewData["Roles"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">@ViewData["Users"]</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit();">@ViewData["Logout"]</a>
+                                <form id="logout-form" asp-area="" asp-controller="Users" asp-action="Logout" method="post" style="display:none;">
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Login">@ViewData["Login"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Register">@ViewData["Register"]</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content-section">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @if (Context.Session.GetString("UserEmail") != null)
+    {
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2024 - MHR_V02 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+    }
+
+    <!-- لینک فایل‌های اسکریپت -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/glassmorphism-theme.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

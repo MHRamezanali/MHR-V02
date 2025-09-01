@@ -1,0 +1,35 @@
+﻿@model MHR_V02.ViewModels.Base.UserViewModel
+
+@{
+    ViewData["Title"] = @ViewData["Delete"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="glass-container mt-5 p-4">
+    <h1 class="glass-heading">@ViewData["Delete"]</h1>
+    <h3 class="glass-description">@ViewData["Areyousureyouwanttodeletethis"]</h3>
+    <div class="glass-content mt-4">
+        <h4>@ViewData["Role"]</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">@ViewData["FirstName"]</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.FirstName)</dd>
+            <dt class="col-sm-2">@ViewData["LastName"]</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.LastName)</dd>
+            <dt class="col-sm-2">@ViewData["Email"]</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Email)</dd>
+            <dt class="col-sm-2">@ViewData["ActiveStatus"]</dt>
+            <span class="glass-badge @(Model.IsActive ? "glass-badge-success" : "glass-badge-danger")">
+                @(Model.IsActive ? @ViewData["Active"] : @ViewData["Inactive"])
+            </span>
+        </dl>
+    </div>
+
+    <form asp-action="DeleteConfirmed" class="mt-4">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="@ViewData["DeleteConfirmed"]" class="btn btn-danger glass-btn-danger" />
+        <div class="text-center">
+            <a asp-action="Index" class="glass-link">@ViewData["BacktoList"]</a>
+        </div>
+    </form>
+</div>

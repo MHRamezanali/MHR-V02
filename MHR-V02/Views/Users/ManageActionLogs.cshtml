@@ -1,0 +1,53 @@
+﻿@model MHR_V02.ViewModels.Base.ManageActionLogsViewModel
+
+@{
+    ViewData["Title"] = @ViewData["UserDetails"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary">@ViewData["ManageActionLogsFor"]</h2>
+    <h2 class="text-center text-primary">@Model.UserName</h2>
+    <hr />
+    <form asp-action="ManageActionLogs" method="post">
+        <input type="hidden" asp-for="UserId" />
+        @if (Model.ActionLogs != null && Model.ActionLogs.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@ViewData["ControllerName"]</th>
+                        <th>@ViewData["ActionName"]</th>
+                        <th>@ViewData["MethodName"]</th>
+                        <th>@ViewData["Assigned"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.ActionLogs.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model.ActionLogs[i].ControllerName</td>
+                            <td>@Model.ActionLogs[i].ActionName</td>
+                            <td>@Model.ActionLogs[i].HttpMethod</td>
+                            <td>
+                                <input type="checkbox" asp-for="ActionLogs[i].IsSelected" />
+                                <input type="hidden" asp-for="ActionLogs[i].Id" />
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-danger">No actions found.</p>
+        }
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-success">@ViewData["SaveChanges"]</button>
+            <a asp-action="Index" class="btn btn-secondary">@ViewData["BacktoUsers"]</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,65 @@
+﻿@model MHR_V02.Models.Base.User
+
+@{
+    ViewData["Title"] = @ViewData["Create User"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-success">@ViewData["CreateNewUser"]</h1>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">@ViewData["EnterUserDetails"]</h4>
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label">@ViewData["FirstName"]</label>
+                            <input asp-for="FirstName" class="form-control" placeholder=@ViewData["EnterFirstName"] />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label">@ViewData["LastName"]</label>
+                            <input asp-for="LastName" class="form-control" placeholder=@ViewData["EnterLastName"] />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">@ViewData["Email"]</label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder=@ViewData["EnterEmailAddress"] />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">@ViewData["Password"]</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder=@ViewData["EnterPassword"] />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="IsActive" />
+                            <label class="form-check-label">
+                                @ViewData["IsActive"]
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">@ViewData["Create"]</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-end">
+                    <a asp-action="Index" class="btn btn-secondary">@ViewData["BacktoList"]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

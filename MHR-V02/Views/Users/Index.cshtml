@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MHR_V02.ViewModels.Base.UserViewModel>
+
+<div class="glass-container">
+    <p>
+        <a asp-action="Create" class="btn glass-btn">@ViewBag.Create</a>
+    </p>
+    <table class="glass-table">
+        <thead>
+            <tr>
+                <th>@ViewData["FirstName"]</th>
+                <th>@ViewData["LastName"]</th>
+                <th>@ViewData["Email"]</th>
+                <th>@ViewData["IsActive"]</th>
+                <th>@ViewData["Roles"]</th>
+                <th>@ViewData["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    @* <td>
+                        <span class="glass-badge @(user.IsActive ? "glass-badge-success" : "glass-badge-danger")">
+                            @(user.IsActive ? @ViewData["Active"] : @ViewData["Inactive"])
+                        </span>
+                    </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => user.IsActive)
+                    </td>
+                    <td>
+                        @if (user.Roles != null && user.Roles.Any())
+                        {
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var role in user.Roles)
+                                {
+                                    <li><span class="glass-badge glass-badge-info">@role</span></li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-muted">@ViewData["NoRoles"]</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="ManageActionLogs" asp-route-id="@user.Id" class="btn glass-btn-secondary btn-sm">@ViewData["ManageActionLogs"]</a>
+                        <a asp-action="ManageRoles" asp-route-id="@user.Id" class="btn glass-btn-secondary btn-sm">@ViewData["ManageRoles"]</a>
+                        <a asp-action="Details" asp-route-id="@user.Id" class="btn glass-btn-primary btn-sm">@ViewData["Details"]</a>
+                        <a asp-action="Edit" asp-route-id="@user.Id" class="btn glass-btn-warning btn-sm">@ViewData["Edit"]</a>
+                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn glass-btn-danger btn-sm">@ViewData["Delete"]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

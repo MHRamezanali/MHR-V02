@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MHR_V02.Models.Base.Role>
+@{
+    ViewData["Title"] = @ViewData["RolesIndex"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="glass-container">
+    <h1 class="glass-heading">@ViewData["Title"]</h1>
+    <p class="glass-description">@ViewData["Description"]</p>
+    <p>
+        <a asp-action="Create" class="btn glass-btn">@ViewData["Create"]</a>
+    </p>
+
+    <table class="glass-table">
+        <thead>
+            <tr>
+                <th>
+                    @ViewData["Name"]
+                </th>
+                <th>
+                    @ViewData["Description"]
+                </th>
+                <th>
+                    @ViewData["IsActive"]
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        <a asp-action="ManageActionLogs" asp-route-id="@item.Id" class="btn glass-btn-secondary btn-sm">@ViewData["ManageActionLogs"]</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn glass-btn-primary btn-sm">@ViewData["Details"]</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn glass-btn-warning btn-sm">@ViewData["Edit"]</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn glass-btn-danger btn-sm">@ViewData["Delete"]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.glass-table').DataTable({
+            "pageLength": 5, // تعداد آیتم‌ها در هر صفحه
+            "lengthMenu": [5, 10, 25, 50],
+            "language": {
+                "lengthMenu": "نمایش _MENU_ رکورد در هر صفحه",
+                "zeroRecords": "رکوردی یافت نشد",
+                "info": "نمایش صفحه _PAGE_ از _PAGES_",
+                "infoEmpty": "رکوردی موجود نیست",
+                "infoFiltered": "(فیلتر شده از _MAX_ رکورد)"
+            }
+        });
+    });
+</script>
+

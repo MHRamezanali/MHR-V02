@@ -1,0 +1,64 @@
+﻿@model MHR_V02.ViewModels.Base.ManageActionLogsViewModel
+
+@{
+    ViewData["Title"] = @ViewData["ManageActionLogsfor"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="glass-container">
+    <h1 class="glass-heading">@ViewData["Title"]</h1>
+    <p class="glass-description">@ViewData["Description"]</p>
+    <hr />
+    <form asp-action="ManageActionLogs" method="post">
+        <input type="hidden" asp-for="RoleId" />
+        @if (Model.ActionLogs != null && Model.ActionLogs.Any())
+        {
+            <table class="glass-table">
+                <thead>
+                    <tr>
+                        <th>@ViewData["ControllerName"]</th>
+                        <th>@ViewData["ActionName"]</th>
+                        <th>@ViewData["MethodName"]</th>
+                        <th>@ViewData["Assigned"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.ActionLogs.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model.ActionLogs[i].ControllerName</td>
+                            <td>@Model.ActionLogs[i].ActionName</td>
+                            <td>@Model.ActionLogs[i].HttpMethod</td>
+                            <td>
+                                <input type="checkbox" asp-for="ActionLogs[i].IsSelected" name="ActionLogs[@i].IsSelected" />
+                                <input type="hidden" asp-for="ActionLogs[i].Id" name="ActionLogs[@i].Id" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- صفحه‌بندی در پایین جدول -->
+            <nav aria-label="Page navigation example" class="mt-3">
+                <ul class="pagination">
+                    @for (int i = 1; i <= Math.Ceiling((decimal)Model.TotalCount / Model.PageSize); i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" asp-action="ManageActionLogs" asp-route-id="@Model.RoleId" asp-route-pageNumber="@i" asp-route-pageSize="@Model.PageSize">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+        else
+        {
+            <p class="text-danger">@ViewData["Noactionsfound"]</p>
+        }
+
+        <!-- دکمه‌های ذخیره و بازگشت -->
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-success">@ViewData["SaveChanges"]</button>
+            <a asp-action="Index" class="btn btn-secondary">@ViewData["BacktoRoles"]</a>
+        </div>
+    </form>
+</div>
