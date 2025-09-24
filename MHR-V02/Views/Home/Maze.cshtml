@@ -1,0 +1,403 @@
+@{
+    ViewData["Title"] = ViewData["Title"] ?? "بازی هزار تو";
+}
+
+<section class="maze-wrapper">
+    <h1>@ViewData["Title"]</h1>
+    <p class="description">
+        با استفاده از کلیدهای جهت‌دار صفحه‌کلید مسیر خود را از خانه آبی به سمت خروج سبز پیدا کنید.
+        برای مشاهده یک برد نمونه، از حل خودکار استفاده کنید و ببینید چگونه مسیر درست پیدا می‌شود.
+    </p>
+
+    <div id="maze" class="maze-grid" role="presentation" aria-hidden="true"></div>
+
+    <div class="controls">
+        <button id="resetButton" type="button" class="btn btn-secondary">شروع دوباره</button>
+        <button id="autoButton" type="button" class="btn btn-success">حل خودکار</button>
+    </div>
+
+    <p id="status" class="status" role="status" aria-live="polite">
+        با کلیدهای جهت‌دار حرکت کنید یا روی «حل خودکار» بزنید تا بردن بازی را ببینید.
+    </p>
+
+    <div class="legend">
+        <span class="legend-item player">بازیکن</span>
+        <span class="legend-item goal">خروج</span>
+        <span class="legend-item path">مسیر قابل عبور</span>
+        <span class="legend-item wall">دیوار</span>
+    </div>
+</section>
+
+<style>
+    .maze-wrapper {
+        max-width: 720px;
+        margin: 2rem auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+        font-family: "Vazirmatn", "Segoe UI", sans-serif;
+        line-height: 1.7;
+        color: #1f2937;
+    }
+
+    .maze-wrapper h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: #111827;
+    }
+
+    .maze-wrapper .description {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .maze-grid {
+        display: grid;
+        grid-template-columns: repeat(9, 48px);
+        gap: 6px;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+    }
+
+    .maze-cell {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+        box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+    }
+
+    .maze-cell.wall {
+        background: linear-gradient(135deg, #1f2937, #111827);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .maze-cell.path {
+        background: #f9fafb;
+    }
+
+    .maze-cell.goal {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        box-shadow: 0 8px 16px rgba(34, 197, 94, 0.35);
+    }
+
+    .maze-cell.player {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.35);
+        transform: scale(1.05);
+    }
+
+    .maze-cell.route {
+        background: linear-gradient(135deg, #fde68a, #fbbf24);
+        box-shadow: 0 4px 8px rgba(251, 191, 36, 0.25);
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        border: none;
+        padding: 0.65rem 1.5rem;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .btn:focus {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #ffffff;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6b7280, #4b5563);
+        color: #ffffff;
+        box-shadow: 0 12px 24px rgba(107, 114, 128, 0.25);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: #ffffff;
+        box-shadow: 0 12px 24px rgba(34, 197, 94, 0.25);
+    }
+
+    .status {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2563eb;
+    }
+
+    .status.win {
+        color: #16a34a;
+    }
+
+    .legend {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-size: 0.95rem;
+        margin-top: 1.5rem;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.75rem;
+        border-radius: 12px;
+        background: #f3f4f6;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .legend-item::before {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 6px;
+        box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.1);
+    }
+
+    .legend-item.player::before {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .legend-item.goal::before {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .legend-item.path::before {
+        background: #f9fafb;
+    }
+
+    .legend-item.wall::before {
+        background: linear-gradient(135deg, #1f2937, #111827);
+    }
+
+    @media (max-width: 600px) {
+        .maze-grid {
+            grid-template-columns: repeat(9, 36px);
+            gap: 4px;
+        }
+
+        .maze-cell {
+            width: 36px;
+            height: 36px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        (function () {
+            const mazeLayout = [
+                [0, 0, 1, 0, 0, 0, 1, 0, 0],
+                [1, 0, 1, 0, 1, 0, 1, 0, 1],
+                [1, 0, 0, 0, 1, 0, 0, 0, 1],
+                [1, 1, 1, 0, 1, 1, 1, 0, 1],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0],
+                [0, 1, 1, 1, 1, 0, 1, 1, 0],
+                [0, 1, 0, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 1, 1, 1, 0, 1, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+
+            const mazeElement = document.getElementById('maze');
+            const statusElement = document.getElementById('status');
+            const resetButton = document.getElementById('resetButton');
+            const autoButton = document.getElementById('autoButton');
+
+            const start = { row: 0, col: 0 };
+            const goal = { row: mazeLayout.length - 1, col: mazeLayout[0].length - 1 };
+            const solutionPath = [
+                { row: 0, col: 0 },
+                { row: 0, col: 1 },
+                { row: 1, col: 1 },
+                { row: 2, col: 1 },
+                { row: 2, col: 2 },
+                { row: 2, col: 3 },
+                { row: 3, col: 3 },
+                { row: 4, col: 3 },
+                { row: 4, col: 4 },
+                { row: 4, col: 5 },
+                { row: 5, col: 5 },
+                { row: 6, col: 5 },
+                { row: 6, col: 4 },
+                { row: 6, col: 3 },
+                { row: 6, col: 2 },
+                { row: 7, col: 2 },
+                { row: 8, col: 2 },
+                { row: 8, col: 3 },
+                { row: 8, col: 4 },
+                { row: 8, col: 5 },
+                { row: 8, col: 6 },
+                { row: 8, col: 7 },
+                { row: 8, col: 8 }
+            ];
+
+            let player = { ...start };
+            let solving = false;
+            let animationId = null;
+
+            function buildGrid() {
+                mazeElement.innerHTML = '';
+                mazeLayout.forEach((row, rowIndex) => {
+                    row.forEach((cell, colIndex) => {
+                        const cellElement = document.createElement('div');
+                        cellElement.classList.add('maze-cell');
+                        cellElement.dataset.row = rowIndex;
+                        cellElement.dataset.col = colIndex;
+
+                        if (cell === 1) {
+                            cellElement.classList.add('wall');
+                        } else {
+                            cellElement.classList.add('path');
+                        }
+
+                        if (rowIndex === goal.row && colIndex === goal.col) {
+                            cellElement.classList.add('goal');
+                        }
+
+                        mazeElement.appendChild(cellElement);
+                    });
+                });
+            }
+
+            function renderPlayer() {
+                mazeElement.querySelectorAll('.maze-cell').forEach(cell => {
+                    cell.classList.remove('player');
+                });
+
+                const playerCell = mazeElement.querySelector(`.maze-cell[data-row="${player.row}"][data-col="${player.col}"]`);
+                if (playerCell) {
+                    playerCell.classList.add('player');
+                }
+            }
+
+            function clearRoute() {
+                mazeElement.querySelectorAll('.maze-cell').forEach(cell => {
+                    cell.classList.remove('route');
+                });
+            }
+
+            function updateStatus(message, won = false) {
+                statusElement.textContent = message;
+                statusElement.classList.toggle('win', won);
+            }
+
+            function resetGame() {
+                if (animationId) {
+                    clearInterval(animationId);
+                    animationId = null;
+                }
+                solving = false;
+                player = { ...start };
+                clearRoute();
+                renderPlayer();
+                updateStatus('با کلیدهای جهت‌دار حرکت کنید یا روی «حل خودکار» بزنید تا بردن بازی را ببینید.');
+            }
+
+            function isWalkable(row, col) {
+                return row >= 0 && col >= 0 && row < mazeLayout.length && col < mazeLayout[0].length && mazeLayout[row][col] === 0;
+            }
+
+            function movePlayer(rowDelta, colDelta) {
+                if (solving) {
+                    return;
+                }
+
+                const nextRow = player.row + rowDelta;
+                const nextCol = player.col + colDelta;
+
+                if (!isWalkable(nextRow, nextCol)) {
+                    updateStatus('این مسیر بسته است! مسیر دیگری را امتحان کن.');
+                    return;
+                }
+
+                player = { row: nextRow, col: nextCol };
+                renderPlayer();
+
+                if (player.row === goal.row && player.col === goal.col) {
+                    updateStatus('تبریک! از هزار تو خارج شدی و بازی را بردی! 🎉', true);
+                } else {
+                    updateStatus('در مسیر خروج هستی، ادامه بده!');
+                }
+            }
+
+            function autoSolve() {
+                if (solving) {
+                    return;
+                }
+
+                solving = true;
+                clearRoute();
+                updateStatus('حل خودکار در حال اجراست... مسیر برد را تماشا کن!');
+                let step = 0;
+
+                animationId = setInterval(() => {
+                    if (step >= solutionPath.length) {
+                        clearInterval(animationId);
+                        animationId = null;
+                        solving = false;
+                        updateStatus('نمونه حل با موفقیت انجام شد. تو هم توانستی ببری! 🎉', true);
+                        return;
+                    }
+
+                    const position = solutionPath[step];
+                    const cellElement = mazeElement.querySelector(`.maze-cell[data-row="${position.row}"][data-col="${position.col}"]`);
+                    if (cellElement) {
+                        cellElement.classList.add('route');
+                    }
+
+                    player = { ...position };
+                    renderPlayer();
+                    step += 1;
+                }, 220);
+            }
+
+            function handleKeydown(event) {
+                const keyActions = {
+                    ArrowUp: () => movePlayer(-1, 0),
+                    ArrowDown: () => movePlayer(1, 0),
+                    ArrowLeft: () => movePlayer(0, -1),
+                    ArrowRight: () => movePlayer(0, 1)
+                };
+
+                const action = keyActions[event.key];
+                if (action) {
+                    event.preventDefault();
+                    action();
+                }
+            }
+
+            document.addEventListener('keydown', handleKeydown);
+            resetButton.addEventListener('click', resetGame);
+            autoButton.addEventListener('click', autoSolve);
+
+            buildGrid();
+            renderPlayer();
+
+            // اجرای خودکار برای نمایش نمونه برد
+            setTimeout(autoSolve, 600);
+        })();
+    </script>
+}

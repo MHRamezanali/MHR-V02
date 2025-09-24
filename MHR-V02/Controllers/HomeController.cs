@@ -21,7 +21,16 @@ namespace MHR_V02.Controllers
             SetCommonLocalizedValues();
             return View();
         }
-        
+
+        [LoggableAction]
+        [HttpGet]
+        public IActionResult Maze()
+        {
+            SetCommonLocalizedValues();
+            ViewData["Title"] = "بازی هزار تو";
+            return View();
+        }
+
         [LoggableAction]
         [HttpGet]
         [ServiceFilter(typeof(AccessControlFilter))]
